@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>搏朗通 BORATON - 升降麻將桌</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="./images/boraton-logo.png" type="image/png">
+    <style>
+        /* --- Google Fonts & Lucide Icons --- */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        @font-face {
+            font-family: 'LucideIcons';
+            src: url(lucide.ttf) format('truetype');
+        }
+
+        /* --- CSS Variables for Theming --- */
+        :root {
+            /* --- Dark Theme (Default) --- */
+            --bg-primary: #0d0d0d;
+            --bg-secondary: #1a1a1a;
+            --bg-card: #1f1f1f; /* 卡片/區塊背景 */
+            --bg-banner: #1f1f1f; /* 明星產品橫幅背景 (可與卡片相同或稍有區別) */
+            --bg-navbar: rgba(18, 18, 18, 0.8);
+            --bg-navbar-hover: rgba(18, 18, 18, 0.95);
+            --bg-dropdown: #1f1f1f;
+            --bg-dropdown-hover: rgba(255, 255, 255, 0.1);
+            --bg-button-blue: #2563eb;
+            --bg-button-blue-hover: #1d4ed8;
+            --bg-button-blue-hover-gradient: linear-gradient(to right, #1d4ed8, #2563eb);
+            --bg-button-secondary: rgba(255, 255, 255, 0.1);
+            --bg-button-secondary-hover: rgba(255, 255, 255, 0.2);
+            --bg-carousel-button: rgba(0, 0, 0, 0.5);
+            --bg-carousel-button-hover: rgba(0, 0, 0, 0.8);
+            --bg-preloader: #0d0d0d;
+
+            --text-primary: #e2e2e2;
+            --text-secondary: #a0a0a0;
+            --text-heading: #ffffff;
+            --text-link: #58a6ff;
+            --text-link-hover: #80bfff;
+            --text-button-blue: #ffffff;
+            --text-button-secondary: #e2e2e2;
+            --text-button-secondary-hover: #ffffff;
+            --text-footer: #a0a0a0;
+            --text-footer-heading: #e2e2e2;
+            --text-footer-link-hover: #ffffff;
+            --text-placeholder: #e2e2e2;
+
+            --border-color: rgba(255, 255, 255, 0.1);
+            --border-color-subtle: rgba(255, 255, 255, 0.05); /* 更細微邊框 */
+            --border-button-secondary: rgba(255, 255, 255, 0.2);
+            --border-button-secondary-hover: rgba(255, 255, 255, 0.4);
+            --border-footer: rgba(255, 255, 255, 0.15);
+            --border-preloader: rgba(255, 255, 255, 0.2);
+            --border-preloader-active: #ffffff;
+            --border-card-hover: var(--text-link); /* 卡片/橫幅懸停邊框 */
+            --border-banner: rgba(255, 255, 255, 0.08); /* 橫幅初始邊框 */
+
+            --shadow-card: rgba(0, 0, 0, 0.2);
+            --shadow-card-hover: rgba(0, 0, 0, 0.35);
+            --shadow-banner: rgba(0, 0, 0, 0.15); /* 橫幅陰影 */
+            --shadow-banner-hover: rgba(0, 0, 0, 0.3); /* 橫幅懸停陰影 */
+            --shadow-navbar: rgba(0, 0, 0, 0.1);
+            --shadow-dropdown: rgba(0, 0, 0, 0.3);
+            --shadow-button: rgba(0,0,0,0.2);
+            --shadow-button-hover: rgba(0,0,0,0.35);
+            --shadow-image: rgba(0, 0, 0, 0.5);
+            --glow-card-hover: 0 0 15px rgba(88, 166, 255, 0.3);
+
+            --transition-duration: 0.3s;
+            --transition-timing: ease-in-out;
+            --transition-timing-elastic: cubic-bezier(0.23, 1, 0.32, 1); /* 彈性曲線 */
+
+            /* --- Section Separation Variables --- */
+            --section-spacing-top: 5rem;
+            --section-padding-internal: 5rem;
+            --border-section-divider: rgba(255, 255, 255, 0.15);
+        }
+
+        /* --- Light Theme --- */
+        body.light-theme {
+            /* ... (大部分淺色變數保持不變) ... */
+            --bg-primary: #f8f9fa;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --bg-banner: #ffffff; /* 淺色橫幅背景 */
+            /* ... */
+            --text-primary: #212529;
+            --text-secondary: #6c757d;
+            --text-heading: #1a1a1a;
+            /* ... */
+            --border-color: rgba(255, 255, 255, 0.1);
+            --border-color-subtle: rgba(0, 0, 0, 0.08);
+            --border-button-secondary: rgba(0, 0, 0, 0.15);
+            --border-button-secondary-hover: rgba(0, 0, 0, 0.25);
+            --border-footer: rgba(0, 0, 0, 0.1);
+            --border-preloader: rgba(0, 0, 0, 0.1);
+            --border-preloader-active: #007bff;
+            --border-card-hover: var(--text-link);
+            --border-banner: rgba(0, 0, 0, 0.1); /* 淺色橫幅邊框 */
+
+            --shadow-card: rgba(0, 0, 0, 0.08);
+            --shadow-card-hover: rgba(0, 0, 0, 0.18);
+            --shadow-banner: rgba(0, 0, 0, 0.06); /* 淺色橫幅陰影 */
+            --shadow-banner-hover: rgba(0, 0, 0, 0.15); /* 淺色橫幅懸停陰影 */
+            /* ... */
+            --glow-card-hover: 0 0 15px rgba(0, 86, 179, 0.2);
+
+            /* --- Light Theme Section Separation --- */
+            --border-section-divider: rgba(255, 255, 255, 0.1);
+        }
+
+        /* --- 基本樣式 --- */
+        body {
+            font-family: 'Inter', "Helvetica Neue", Arial, "PingFang TC", "Microsoft JhengHei", sans-serif;
+            background-color: var(--bg-primary);
+            background-image: linear-gradient(to bottom, var(--bg-primary), color-mix(in srgb, var(--bg-primary) 95%, var(--text-primary) 5%));
+            color: var(--text-primary);
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out, background-color var(--transition-duration) var(--transition-timing), color var(--transition-duration) var(--transition-timing);
+            overflow-x: hidden;
+        }
+        body.loaded { opacity: 1; }
+        .lucide { /* Lucide 圖標基礎樣式 */
+            font-family: 'LucideIcons'; font-style: normal; font-weight: normal; font-variant: normal;
+            text-transform: none; line-height: 1; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+            display: inline-block; vertical-align: middle;
+            transition: transform var(--transition-duration) var(--transition-timing);
+        }
+
+        /* --- 導覽列樣式 (保持不變) --- */
+        /* ... */
+        .navbar-blur { background-color: var(--bg-navbar); backdrop-filter: saturate(180%) blur(15px); -webkit-backdrop-filter: saturate(180%) blur(15px); border-bottom: 1px solid var(--border-color); transition: background-color var(--transition-duration) var(--transition-timing), border-color var(--transition-duration) var(--transition-timing); box-shadow: 0 2px 4px var(--shadow-navbar); }
+        .navbar-blur:hover { background-color: var(--bg-navbar-hover); }
+        .navbar-blur a:not(.brand-logo) { position: relative; color: var(--text-primary); text-decoration: none; padding-bottom: 4px; transition: color var(--transition-duration) var(--transition-timing), transform 0.2s ease; }
+        .navbar-blur a:not(.brand-logo)::after { content: ''; position: absolute; left: 50%; bottom: 0; width: 0; height: 1.5px; background-color: var(--text-link); transition: width var(--transition-duration) ease-out, left var(--transition-duration) ease-out; }
+        .navbar-blur a:not(.brand-logo):hover { color: var(--text-heading); transform: scale(1.05); }
+        .navbar-blur a:not(.brand-logo):hover::after { width: 100%; left: 0; }
+        .navbar-blur button { color: var(--text-primary); transition: color var(--transition-duration) var(--transition-timing), transform 0.2s ease; }
+        .navbar-blur button:hover { color: var(--text-heading); transform: scale(1.05); }
+        #theme-toggle:hover { transform: scale(1.1) rotate(15deg); }
+        .brand-logo { font-weight: 700; font-size: 1.4rem; letter-spacing: -0.02em; color: var(--text-heading); display: flex; align-items: center; transition: transform 0.2s ease; padding-bottom: 0; }
+        .brand-logo::after { display: none; }
+        .brand-logo img { max-height: 24px; margin-right: 8px; transition: transform 0.3s ease; }
+        .brand-logo:hover img{ transform: scale(1.05); }
+        .brand-logo:hover { transform: scale(1.03); }
+        .brand-logo .chinese { font-size: 1.1rem; font-weight: 600; margin-left: 4px; color: var(--text-secondary); }
+        .dropdown { position: relative; }
+        .dropdown-menu { position: absolute; top: calc(100% + 0.5rem); left: 50%; transform: translateX(-50%); min-width: 180px; background-color: var(--bg-dropdown); border: 1px solid var(--border-color); border-radius: 8px; box-shadow: 0 8px 16px var(--shadow-dropdown); z-index: 60; opacity: 0; visibility: hidden; transition: opacity var(--transition-duration) var(--transition-timing), visibility var(--transition-duration) var(--transition-timing), transform var(--transition-duration) var(--transition-timing), border-color var(--transition-duration) var(--transition-timing), background-color var(--transition-duration) var(--transition-timing); transform-origin: top center; transform: translateX(-50%) translateY(-10px); }
+        .dropdown-menu.open { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+        .dropdown-menu a { display: block; padding: 0.75rem 1.25rem; color: var(--text-primary); font-size: 0.9rem; white-space: nowrap; transition: background-color var(--transition-duration) var(--transition-timing), color var(--transition-duration) var(--transition-timing), transform 0.2s ease; text-decoration: none; padding-bottom: 0.75rem; }
+        .dropdown-menu a::after { display: none; }
+        .dropdown-menu a:hover { background-color: var(--bg-dropdown-hover); color: var(--text-heading); transform: translateX(4px); }
+        .dropdown-toggle .lucide-chevron { transition: transform var(--transition-duration) var(--transition-timing); }
+        .dropdown-toggle[aria-expanded="true"] .lucide-chevron { transform: rotate(180deg); }
+
+
+        /* --- 連結與按鈕樣式 (保持不變) --- */
+        /* ... */
+        .cta-link { color: var(--text-link); text-decoration: none; font-size: 1.1rem; margin: 0 0.5rem; position: relative; padding-bottom: 2px; transition: color var(--transition-duration) var(--transition-timing), transform 0.2s ease; }
+        .cta-link::after { content: ''; position: absolute; left: 0; bottom: 0; width: 100%; height: 1px; background-color: var(--text-link-hover); transform: scaleX(0); transform-origin: bottom right; transition: transform var(--transition-duration) var(--transition-timing-elastic); }
+        .cta-link:hover { color: var(--text-link-hover); transform: scale(1.05); }
+        .cta-link:hover::after { transform: scaleX(1); transform-origin: bottom left; }
+        .button-blue { display: inline-block; background-color: var(--bg-button-blue); color: var(--text-button-blue); padding: 0.8rem 1.8rem; border-radius: 8px; text-decoration: none; font-size: 0.95rem; font-weight: 600; border: none; transition: background-color var(--transition-duration) var(--transition-timing), transform 0.2s ease, box-shadow var(--transition-duration) var(--transition-timing), background-image var(--transition-duration) var(--transition-timing); box-shadow: 0 2px 4px var(--shadow-button); } /* Added background-image transition */
+        .button-blue:hover { background-image: var(--bg-button-blue-hover-gradient); background-color: var(--bg-button-blue-hover); transform: scale(1.03) translateY(-2px); box-shadow: 0 6px 12px var(--shadow-button-hover); }
+        .button-blue:active { transform: scale(0.98) translateY(0px); box-shadow: 0 2px 4px var(--shadow-button); }
+        .button-secondary { display: inline-block; background-color: var(--bg-button-secondary); color: var(--text-button-secondary); box-shadow: none; border: 1px solid var(--border-button-secondary); padding: 0.6rem 1.2rem; font-size: 0.9rem; font-weight: 500; border-radius: 8px; text-decoration: none; transition: background-color var(--transition-duration) var(--transition-timing), color var(--transition-duration) var(--transition-timing), transform 0.2s ease, border-color var(--transition-duration) var(--transition-timing), box-shadow var(--transition-duration) var(--transition-timing); }
+        .button-secondary:hover { background-color: var(--bg-button-secondary-hover); color: var(--text-button-secondary-hover); transform: scale(1.03) translateY(-1px); border-color: var(--border-button-secondary-hover); box-shadow: 0 3px 6px rgba(0,0,0,0.05); }
+        .button-secondary:active { transform: scale(0.99) translateY(0px); box-shadow: none; }
+
+
+        /* --- 區塊標題樣式 (保持不變) --- */
+        .section-title { color: var(--text-heading); transition: color var(--transition-duration) var(--transition-timing), text-shadow 0.4s ease; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
+        .section-subtitle { color: var(--text-secondary); transition: color var(--transition-duration) var(--transition-timing); }
+        .section-paragraph { color: var(--text-primary); line-height: 1.7; opacity: 0.9; }
+
+        /* --- 特色卡片樣式 (Grid 卡片 - 保持不變) --- */
+        .feature-card {
+            background-color: var(--bg-card); border: 1px solid var(--border-color-subtle); border-radius: 12px; box-shadow: 0 4px 12px var(--shadow-card);
+            transition: transform var(--transition-duration) var(--transition-timing-elastic), box-shadow var(--transition-duration) var(--transition-timing), background-color var(--transition-duration) var(--transition-timing), border-color var(--transition-duration) var(--transition-timing);
+            overflow: hidden; position: relative;
+        }
+        .feature-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 12px 24px var(--shadow-card-hover), var(--glow-card-hover); border-color: var(--border-card-hover); }
+        .feature-card h3 { color: var(--text-heading); transition: color var(--transition-duration) var(--transition-timing); }
+        .feature-card p { color: var(--text-secondary); line-height: 1.7; }
+
+        /* --- 明星產品橫幅樣式 --- */
+        .star-product-banner {
+            background-color: var(--bg-banner);
+            border: 1px solid var(--border-banner);
+            border-radius: 12px; /* 與卡片圓角一致 */
+            box-shadow: 0 6px 16px var(--shadow-banner);
+            transition: transform var(--transition-duration) var(--transition-timing-elastic),
+                        box-shadow var(--transition-duration) var(--transition-timing),
+                        border-color var(--transition-duration) var(--transition-timing),
+                        background-color var(--transition-duration) var(--transition-timing);
+            overflow: hidden; /* 確保內部元素不溢出 */
+        }
+        .star-product-banner:hover {
+            transform: translateY(-6px) scale(1.01); /* 懸停輕微上移和放大 */
+            box-shadow: 0 10px 25px var(--shadow-banner-hover);
+            border-color: var(--border-card-hover); /* 使用與卡片一致的高亮邊框 */
+        }
+        .star-product-banner .banner-image img {
+            transition: transform 0.4s ease; /* 圖片放大過渡 */
+        }
+        .star-product-banner:hover .banner-image img {
+            transform: scale(1.05); /* 懸停時圖片輕微放大 */
+        }
+
+
+        /* --- 產品列表卡片動畫延遲 (保持不變) --- */
+        section.bg-\[var\(--bg-secondary\)\] .feature-card { opacity: 0; /* 初始隱藏 */ }
+        .fade-in-section.visible .feature-card:nth-child(1) { animation-delay: 0.1s; animation-fill-mode: both; animation-name: zoomInCustom; animation-duration: 0.6s; }
+        .fade-in-section.visible .feature-card:nth-child(2) { animation-delay: 0.2s; animation-fill-mode: both; animation-name: zoomInCustom; animation-duration: 0.6s; }
+        .fade-in-section.visible .feature-card:nth-child(3) { animation-delay: 0.3s; animation-fill-mode: both; animation-name: zoomInCustom; animation-duration: 0.6s; }
+        .fade-in-section.visible .feature-card:nth-child(4) { animation-delay: 0.15s; animation-fill-mode: both; animation-name: zoomInCustom; animation-duration: 0.6s; }
+        .fade-in-section.visible .feature-card:nth-child(5) { animation-delay: 0.25s; animation-fill-mode: both; animation-name: zoomInCustom; animation-duration: 0.6s; }
+        .fade-in-section.visible .feature-card:nth-child(6) { animation-delay: 0.35s; animation-fill-mode: both; animation-name: zoomInCustom; animation-duration: 0.6s; }
+        @keyframes zoomInCustom { from { transform: scale(0.9) translateY(15px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+
+        /* --- 載入動畫 (保持不變) --- */
+        #preloader { position: fixed; left: 0; top: 0; z-index: 9999; width: 100%; height: 100%; overflow: visible; background: var(--bg-preloader); display: flex; justify-content: center; align-items: center; transition: opacity 0.5s ease-out; }
+        .spinner { border: 4px solid var(--border-preloader); border-left-color: var(--border-preloader-active); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* --- 區塊淡入動畫 (保持不變) --- */
+        .fade-in-section { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+        .fade-in-section.visible { opacity: 1; transform: translateY(0); }
+
+        /* --- 產品輪播樣式 (Grid 卡片內部 - 保持不變) --- */
+        .product-carousel-container { position: relative; width: 100%; height: 200px; overflow: hidden; border-radius: 12px; margin-bottom: 1rem; background-color: var(--bg-secondary); border: 1px solid var(--border-color-subtle); transition: background-color var(--transition-duration) var(--transition-timing), border-color var(--transition-duration) var(--transition-timing); }
+        .product-carousel-track { display: flex; height: 100%; transition: transform 0.4s ease-in-out; }
+        .product-carousel-slide { flex: 0 0 100%; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+        .product-carousel-slide img { display: block; width: 100%; height: 100%; object-fit: cover; /* 保持 cover */ object-position: center; border-radius: 8px; transition: transform 0.4s ease, filter 0.4s ease; filter: brightness(1); }
+        .product-carousel-slide:hover img { transform: scale(1.05); filter: brightness(1.08); }
+        .carousel-button { position: absolute; top: 50%; transform: translateY(-50%); background-color: var(--bg-carousel-button); color: var(--text-primary); border: none; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; padding: 0; transition: all var(--transition-duration) var(--transition-timing-elastic); opacity: 0.8; }
+        .carousel-button:hover { background-color: var(--bg-carousel-button-hover); color: var(--text-heading); transform: translateY(-50%) scale(1.15) rotate(10deg); opacity: 1; }
+        .carousel-button.left { left: 10px; }
+        .carousel-button.right { right: 10px; }
+        .carousel-button:hover.left { transform: translateY(-50%) scale(1.15) rotate(-10deg); }
+        .carousel-button .lucide { font-size: 18px; }
+
+        /* --- Footer Styles (保持不變) --- */
+        /* ... */
+        footer { background-color: var(--bg-card); color: var(--text-footer); transition: background-color var(--transition-duration) var(--transition-timing), color var(--transition-duration) var(--transition-timing); border-top: 1px solid var(--border-color); }
+        footer .border-b, footer .border-t { border-color: var(--border-footer); }
+        footer h4, footer h5 { color: var(--text-footer-heading); }
+        footer a { color: var(--text-footer); transition: color var(--transition-duration) var(--transition-timing), text-decoration 0.2s ease; }
+        footer a:hover { color: var(--text-footer-link-hover); text-decoration: underline; }
+        footer .text-blue-400 { color: var(--text-link); }
+        footer .hover\:text-blue-300:hover { color: var(--text-link-hover); }
+        footer .text-gray-500 { color: var(--text-secondary); opacity: 0.8;}
+
+        /* --- Section Padding & Spacing (保持不變) --- */
+        /* ... */
+        main > section { padding-left: 1rem; padding-right: 1rem; padding-bottom: var(--section-padding-internal); padding-top: 0; }
+        @media (min-width: 640px) { main > section { padding-left: 1.5rem; padding-right: 1.5rem; } }
+        @media (min-width: 1024px) { main > section { padding-left: 2rem; padding-right: 2rem; } }
+        main > section:first-child { padding-top: var(--section-padding-internal); }
+        main > section + section { margin-top: var(--section-spacing-top); border-top: 1px solid var(--border-section-divider); padding-top: var(--section-padding-internal); transition: border-color var(--transition-duration) var(--transition-timing); }
+        footer { margin-top: var(--section-spacing-top); padding-top: calc(var(--section-padding-internal) * 0.6); padding-bottom: calc(var(--section-padding-internal) * 0.6); }
+
+        /* --- Other utility styles (保持不變) --- */
+        /* ... */
+        .max-w-4xl { max-width: 90%; } .text-5xl { font-size: 3rem; line-height: 1.2; letter-spacing: -0.05em; text-shadow: 1px 1px 3px var(--shadow-card); } .text-2xl { font-size: 1.5rem; line-height: 1.3; font-weight: 500; color: var(--text-secondary); } .text-lg { font-size: 1.125rem; line-height: 1.7; color: var(--text-primary); opacity: 0.9;} .space-x-4 > * + * { margin-left: 1rem; } .gap-8 { gap: 2.5rem; } .mb-4 { margin-bottom: 1rem; } .mb-6 { margin-bottom: 1.5rem; } .mb-8 { margin-bottom: 2rem; } .mb-10 { margin-bottom: 2.5rem; } .mb-12 { margin-bottom: 4rem; } /* 增加標題和內容的間距 */ .mt-12 { margin-top: 3rem; } .text-sm { font-size: 0.9rem; line-height: 1.6rem; } .text-xs{ font-size: 0.8rem; line-height: 1.2rem; color: var(--text-secondary); }
+
+        /* --- 動畫 (保持不變) --- */
+        /* ... */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } } .fade-in { animation: fadeIn 1s ease-out; } .slide-in-left { animation: slideInLeft 0.8s ease-out; } @keyframes slideInLeft { from { transform: translateX(-30px); opacity: 0; } to { transform: translateX(0); opacity: 1; } } .slide-in-right { animation: slideInRight 0.8s ease-out; } @keyframes slideInRight { from { transform: translateX(30px); opacity: 0; } to { transform: translateX(0); opacity: 1; } } /* zoomInCustom is defined above */
+
+        /* Helper class for theme toggle icons (保持不變) */
+        .hidden-icon { display: none; }
+
+    </style>
+</head>
+<body class="bg-[#0d0d0d]"> <!-- Body class updated by JS -->
+
+    <div id="preloader"> <div class="spinner"></div> </div>
+
+    <!-- Nav (HTML 結構不變) -->
+    <nav class="navbar-blur sticky top-0 z-50 w-full h-14">
+        <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
+            <div class="flex justify-between items-center h-full">
+                <a href="index.html" class="brand-logo flex items-center"> <img src="博朗通-白字.png" alt="搏朗通 Logo"> </a>
+                 <div class="hidden md:flex items-center space-x-6 text-sm font-medium">
+                    <a href="https://www.boraton.com">升降麻將桌</a>
+                    <div class="dropdown"> <button id="product-category-toggle" type="button" class="flex items-center dropdown-toggle" aria-expanded="false" aria-haspopup="true"> 產品分類 <span class="lucide lucide-chevron text-xs ml-1"></span> </button> <div id="product-category-menu" class="dropdown-menu hidden"> <a href="https://www.boraton.com">T1</a> <a href="https://www.boraton.com">T2</a> <a href="https://www.boraton.com">T3</a> <a href="https://www.boraton.com">T9</a> <a href="https://www.boraton.com">X6</a> </div> </div>
+                    <a href="https://www.boraton.com">產品特色</a>
+                    <a href="https://www.boraton.com">支援服務</a>
+                    <button id="theme-toggle" type="button" title="切換主題" class="ml-4 p-1.5 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[var(--bg-navbar)] focus:ring-[var(--text-link)]"> <span class="lucide sun-icon text-lg"></span> <span class="lucide moon-icon hidden-icon text-lg"></span> </button>
+                 </div>
+                 <button id="mobile-menu-button" aria-label="打開選單" class="md:hidden p-2 rounded-md hover:bg-[var(--bg-button-secondary-hover)] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[var(--text-link)]"> <span class="lucide text-xl"></span> </button>
+            </div>
+        </div>
+        <!-- Mobile Menu (HTML 結構不變) -->
+        <div id="mobile-menu" class="md:hidden absolute top-14 left-0 w-full bg-[var(--bg-card)] shadow-lg p-4 border-t border-[var(--border-color)] hidden">
+            <a href="https://www.boraton.com" class="block py-2 px-3 rounded hover:bg-[var(--bg-dropdown-hover)] text-[var(--text-primary)] transition-colors duration-200">升降麻將桌</a> <h4 class="text-[var(--text-secondary)] text-xs uppercase mt-3 mb-1 px-3 font-semibold">產品分類</h4> <a href="https://www.boraton.com" class="block py-2 pl-6 pr-3 rounded hover:bg-[var(--bg-dropdown-hover)] text-[var(--text-primary)] transition-colors duration-200">T1</a> <a href="https://www.boraton.com" class="block py-2 pl-6 pr-3 rounded hover:bg-[var(--bg-dropdown-hover)] text-[var(--text-primary)] transition-colors duration-200">T2</a> <a href="https://www.boraton.com" class="block py-2 pl-6 pr-3 rounded hover:bg-[var(--bg-dropdown-hover)] text-[var(--text-primary)] transition-colors duration-200">T3</a> <a href="https://www.boraton.com" class="block py-2 pl-6 pr-3 rounded hover:bg-[var(--bg-dropdown-hover)] text-[var(--text-primary)] transition-colors duration-200">T9</a> <a href="https://www.boraton.com" class="block py-2 pl-6 pr-3 rounded hover:bg-[var(--bg-dropdown-hover)] text-[var(--text-primary)] transition-colors duration-200">X6</a> <div class="border-t border-[var(--border-footer)] my-2"></div> <a href="https://www.boraton.com" class="block py-2 px-3 rounded hover:bg-[var(--bg-dropdown-hover)] text-[var(--text-primary)] transition-colors duration-200">產品特色</a> <a href="https://www.boraton.com" class="block py-2 px-3 rounded hover:bg-[var(--bg-dropdown-hover)] text-[var(--text-primary)] transition-colors duration-200">支援服務</a> <div class="border-t border-[var(--border-footer)] my-2"></div> <button id="mobile-theme-toggle" type="button" title="切換主題" class="w-full flex items-center justify-between py-2 px-3 rounded hover:bg-[var(--bg-dropdown-hover)] text-[var(--text-primary)] transition-colors duration-200"> <span>切換主題</span> <div><span class="lucide sun-icon text-lg"></span><span class="lucide moon-icon hidden-icon text-lg"></span></div> </button>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Hero Section (HTML 結構不變) -->
+        <section class="bg-[var(--bg-secondary)] px-4 fade-in-section">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-5xl font-bold mb-4 section-title slide-in-left">升降麻將桌</h1>
+                <h2 class="text-2xl font-normal mb-6 section-subtitle slide-in-right">首款 一桌三用 - 抗菌岩板</h2>
+                <p class="text-lg section-paragraph mb-8 max-w-2xl mx-auto fade-in">創新升降設計，結合用餐、娛樂、工作，搭配先進抗菌岩板，為您的家居生活增添格調與實用性。</p>
+                <div class="space-x-4"> <a href="https://shop374097456.taobao.com/s" class="button-blue transition-all duration-300">立即選購</a> <a href="https://www.boraton.com" class="cta-link">探索更多特色</a> </div>
+                <div class="mt-12 zoom-in"> <img src="T9-2.jpg" alt="搏朗通升降麻將桌 主圖" class="mx-auto rounded-lg shadow-xl" style="box-shadow: 0 10px 25px -5px var(--shadow-image), 0 8px 10px -6px var(--shadow-image);" onerror="this.src='https://placehold.co/1000x550/'.concat(getComputedStyle(document.body).getPropertyValue('--bg-secondary').substring(1)) +'/'.concat(getComputedStyle(document.body).getPropertyValue('--text-placeholder').substring(1)) +'?text=[圖片載入失敗]'; this.alt='搏朗通升降麻將桌圖片載入失敗'"/> </div>
+            </div>
+        </section>
+
+        <!-- 設計師 Section (HTML 結構不變) -->
+        <section class="bg-[var(--bg-primary)] px-4 fade-in-section">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-4xl font-semibold mb-4 section-title slide-in-right">設計師匠心打造</h2>
+                <p class="text-xl font-normal mb-10 section-subtitle slide-in-left">融合美學與功能，引領家居新風尚</p>
+                <div class="text-left max-w-3xl mx-auto bg-[var(--bg-card)] p-8 rounded-lg shadow-md border border-[var(--border-color-subtle)] transition-all duration-300 hover:shadow-lg fade-in"> <h3 class="text-2xl font-semibold mb-4 text-center text-[var(--text-heading)]">專業設計團隊</h3> <p class="text-[var(--text-primary)] leading-relaxed opacity-90">搏朗通品牌擁有專業設計團隊，集設計、研發、生產、製作、銷售於一體。我們與國內外家具製造商促成戰略性合作，引進海外前沿流行的產品款式，結合人體工學與現代家居需求，助力打造兼具美觀與實用的高品質麻將桌產品。</p> </div>
+                <div class="mt-12 zoom-in"> <img src="智能家居领导品牌.jpg" alt="設計細節圖片" class="mx-auto rounded-lg" style="box-shadow: 0 8px 20px -4px var(--shadow-image);" onerror="this.src='https://placehold.co/900x450/'.concat(getComputedStyle(document.body).getPropertyValue('--bg-primary').substring(1)) +'/'.concat(getComputedStyle(document.body).getPropertyValue('--text-placeholder').substring(1)) +'?text=[圖片載入失敗]'; this.alt='設計細節圖片載入失敗'"/> </div>
+            </div>
+        </section>
+
+        <!-- === NEW: Star Products Section === -->
+        <section class="bg-[var(--bg-primary)] px-4 fade-in-section">
+            <div class="max-w-screen-lg mx-auto"> <!-- 使用稍窄的最大寬度讓橫幅更聚焦 -->
+                <h2 class="text-4xl font-semibold mb-12 text-center section-title slide-in-left">明星產品推薦</h2>
+                <!-- 橫幅容器，設置垂直間距 -->
+                <div class="space-y-12 md:space-y-16">
+
+                    <!-- Star Product Banner 1: T9 -->
+                    <div class="star-product-banner flex flex-col md:flex-row items-center">
+                        <!-- Image Container -->
+                        <div class="w-full md:w-2/5 flex-shrink-0 banner-image"> <!-- 設置寬度和收縮 -->
+                            <img src="T9-2.jpg" alt="搏朗通 T9 麻將桌" class="w-full h-64 md:h-full object-cover" onerror="this.src='https://placehold.co/600x400/'.concat(getComputedStyle(document.body).getPropertyValue('--bg-banner').substring(1)) +'/'.concat(getComputedStyle(document.body).getPropertyValue('--text-placeholder').substring(1)) +'?text=T9 Image Error'; this.alt='T9 圖片載入失敗'">
+                        </div>
+                        <!-- Text Content Container -->
+                        <div class="w-full md:w-3/5 p-6 md:p-8 md:pl-8">
+                            <h3 class="text-3xl font-semibold mb-3 text-[var(--text-heading)]">T9 - 旗艦之選</h3>
+                            <p class="text-base text-[var(--text-secondary)] mb-6 leading-relaxed">
+                                體驗前所未有的奢華與智能。T9 採用頂級抗菌岩板，配合靜音升降系統和精緻工藝，是追求極致品味人士的不二之選。
+                            </p>
+                            <!-- Buttons -->
+                            <div class="flex flex-wrap gap-4 mt-6"> <!-- 使用 gap 替代 space-x，允許換行 -->
+                                <a href="https://shop374097456.taobao.com/s" class="button-blue">立即選購 T9</a>
+                                <a href="https://www.boraton.com/product/t9" class="button-secondary">了解 T9 詳情</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Star Product Banner 1 -->
+
+                    <!-- Star Product Banner 2: X6 -->
+                    <div class="star-product-banner flex flex-col md:flex-row items-center">
+                        <!-- Image Container -->
+                         <!-- 將圖片放在右側，文字在左側 -->
+                        <div class="w-full md:w-3/5 p-6 md:p-8 md:pr-8 order-2 md:order-1"> <!-- 使用 order 控制順序 -->
+                            <h3 class="text-3xl font-semibold mb-3 text-[var(--text-heading)]">X6 - 創新先鋒</h3>
+                            <p class="text-base text-[var(--text-secondary)] mb-6 leading-relaxed">
+                                X6 突破傳統界限，融合尖端科技與多功能設計。一桌多用，智能操控，抗菌面板，為您的現代家居生活注入無限可能。
+                            </p>
+                            <!-- Buttons -->
+                            <div class="flex flex-wrap gap-4 mt-6">
+                                <a href="https://shop374097456.taobao.com/s" class="button-blue">立即選購 X6</a>
+                                <a href="https://www.boraton.com/product/x6" class="button-secondary">了解 X6 詳情</a>
+                            </div>
+                        </div>
+                         <!-- Text Content Container -->
+                        <div class="w-full md:w-2/5 flex-shrink-0 banner-image order-1 md:order-2"> <!-- 使用 order 控制順序 -->
+                            <img src="X6-1.jpg" alt="搏朗通 X6 麻將桌" class="w-full h-64 md:h-full object-cover" onerror="this.src='https://placehold.co/600x400/'.concat(getComputedStyle(document.body).getPropertyValue('--bg-banner').substring(1)) +'/'.concat(getComputedStyle(document.body).getPropertyValue('--text-placeholder').substring(1)) +'?text=X6 Image Error'; this.alt='X6 圖片載入失敗'">
+                        </div>
+                    </div>
+                    <!-- End Star Product Banner 2 -->
+
+                </div> <!-- End Banners Container -->
+            </div>
+        </section>
+        <!-- === END: Star Products Section === -->
+
+
+        <!-- Product List Section (Grid - HTML 結構不變) -->
+        <section class="bg-[var(--bg-secondary)] px-4 fade-in-section">
+             <h2 class="text-4xl font-semibold mb-12 text-center section-title slide-in-left">產品列表</h2>
+            <div class="max-w-screen-xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Product Card T1 -->
+                <div class="feature-card rounded-lg overflow-hidden text-center pt-10 pb-8 px-6 flex flex-col justify-between items-center min-h-[500px]">
+                    <div><h3 class="text-3xl font-semibold mb-3">T1</h3><p class="text-lg font-normal mb-5">時尚外觀，科技內芯。</p><div class="space-x-4 mb-6"><a href="https://www.boraton.com/product/t1" class="cta-link">了解詳情</a></div></div>
+                    <div class="product-carousel-container" data-carousel-id="t1"><div class="product-carousel-track"><div class="product-carousel-slide"><img src="T1-7.jpg" alt="T1 產品圖片 1" onerror="this.src='https://placehold.co/600x400/'.concat(getComputedStyle(document.body).getPropertyValue('--bg-secondary').substring(1)) +'/'.concat(getComputedStyle(document.body).getPropertyValue('--text-placeholder').substring(1)) +'?text=T1 圖1 失敗'; this.alt='T1 產品圖片 1 載入失敗'" /></div><div class="product-carousel-slide"><img src="T1-6.jpg" alt="T1 產品圖片 2" onerror="this.src='https://placehold.co/600x400/'.concat(getComputedStyle(document.body).getPropertyValue('--bg-secondary').substring(1)) +'/'.concat(getComputedStyle(document.body).getPropertyValue('--text-placeholder').substring(1)) +'?text=T1 圖2 失敗'; this.alt='T1 產品圖片 2 載入失敗'" /></div><div class="product-carousel-slide"><img src="T1-3.jpg" alt="T1 產品圖片 3" onerror="this.src='https://placehold.co/600x400/'.concat(getComputedStyle(document.body).getPropertyValue('--bg-secondary').substring(1)) +'/'.concat(getComputedStyle(document.body).getPropertyValue('--text-placeholder').substring(1)) +'?text=T1 圖3 失敗'; this.alt='T1 產品圖片 3 載入失敗'" /></div></div><button class="carousel-button left" aria-label="Previous image"><span class="lucide"></span></button><button class="carousel-button right" aria-label="Next image"><span class="lucide"></span></button></div>
+                </div>
+                <!-- Product Card T2 --><div class="feature-card rounded-lg overflow-hidden text-center pt-10 pb-8 px-6 flex flex-col justify-between items-center min-h-[500px]"><div><h3 class="text-3xl font-semibold mb-3">T2</h3><p class="text-lg font-normal mb-5">經典設計，優雅品味。</p><div class="space-x-4 mb-6"><a href="https://www.boraton.com/product/t2" class="cta-link">了解詳情</a></div></div><div class="product-carousel-container" data-carousel-id="t2"><div class="product-carousel-track"><div class="product-carousel-slide"><img src="T2-1.jpg" alt="T2 產品圖片 1" onerror="this.src='https://placehold.co/600x400/'.concat(getComputedStyle(document.body).getPropertyValue('--bg-secondary').substring(1)) +'/'.concat(getComputedStyle(document.body).getPropertyValue('--text-placeholder').substring(1)) +'?text=T2 圖1 失敗'; this.alt='T2 產品圖片 1 載入失敗'" /></div><div class="product-carousel-slide"><img src="T2-2.jpg" alt="T2 產品圖片 2" onerror="this.src='https://placehold.co/600x400/'.concat(getComputedStyle(document.body).getPropertyValue('--bg-secondary').substring(1)) +'/'.concat(getComputedStyle(document.body).getPropertyValue('--text-placeholder').substring(1)) +'?text=T2 圖2 失敗'; this.alt='T2 產品圖片 2 載入失敗'" /></div><div class="product-carousel-slide"><img src="T2-3.jpg" alt="T2 產品圖片 3" onerror="this.src='https://placehold.co/600x400/'.concat(getComputedStyle(document.body).getPropertyValue('--bg-secondary').substring(1)) +'/'.concat(getComputedStyle(document.body).getPropertyValue('--text-placeholder').substring(1)) +'?text=T2 圖3 失敗'; this.alt='T2 產品圖片 3 載入失敗'" /></div></div><button class="carousel-button left" aria-label="Previous image"><span class="lucide"></span></button><button class="carousel-button right" aria-label="Next image"><span class="lucide"></span></button></div></div>
+                <!-- Product Card T3 --><div class="feature-card rounded-lg overflow-hidden text-center pt-10 pb-8 px-6 flex flex-col justify-between items-center min-h-[500px]"><div><h3 class="text-3xl font-semibold mb-3">T3</h3><p class="text-lg font-normal mb-5">科技升級，體驗升級。</p><div class="space-x-4 mb-6"><a href="https://www.boraton.com/product/t3" class="cta-link">了解詳情</a></div></div><div class="product-carousel-container" data-carousel-id="t3"><div class="product-carousel-track"><div class="product-carousel-slide"><img src="T3-1.jpg" alt="T3 產品圖片 1" onerror="this.src='https://placehold.co/600x400/'.concat(getComputedStyle(document.body).getPropertyValue('--bg-secondary').substring(1)) +'/'.concat(getComputedStyle(document.body).getPropertyValue('--text-placeholder').substring(1)) +'?text=T3 圖1 失敗'; this.alt='T3 產品圖片 1 載入失敗'" /></div><div class="product-carousel-slide"><img src="T3-2.JPG" alt="T3 產品圖片 2" onerror="this.src='https://placehold.co/600x400/'.concat(getComputedStyle(document.body).getPropertyValue('--bg-secondary').substring(1)) +'/'.concat(getComputedStyle(document.body).getPropertyValue('--text-placeholder').substring(1)) +'?text=T3 圖2 失敗'; this.alt='T3 產品圖片 2 載入失敗'" /></div><div class="product-carousel-slide"><img src="T3-3.JPG" alt="T3 產品圖片 3" onerror="this.src='https://placehold.co/600x400/'.concat(getComputedStyle(document.body).getPropertyValue('--bg-secondary').substring(1)) +'/'.concat(getComputedStyle(document.body).getPropertyValue('--text-placeholder').substring(1)) +'?text=T3 圖3 失敗'; this.alt='T3 產品圖片 3 載入失敗'" /></div></div><button class="carousel-button left" aria-label="Previous image"><span class="lucide"></span></button><button class="carousel-button right" aria-label="Next image"><span class="lucide"></span></button></div></div>
+                <!-- Product Card T9 --><div class="feature-card rounded-lg overflow-hidden text-center pt-10 pb-8 px-6 flex flex-col justify-between items-center min-h-[500px]"><div><h3 class="text-3xl font-semibold mb-3">T9</h3><p class="text-lg font-normal mb-5">至臻品質，奢華享受。</p><div class="space-x-4 mb-6"><a href="https://www.boraton.com/product/t9" class="cta-link">了解詳情</a></div></div><div class="product-carousel-container" data-carousel-id="t9"><div class="product-carousel-track"><div class="product-carousel-slide"><img src="T9-2.jpg" alt="T9 產品圖片 1" onerror="this.src='https://placehold.co/600x400/'.concat(getComputedStyle(document.body).getPropertyValue('--bg-secondary').substring(1)) +'/'.concat(getComputedStyle(document.body).getPropertyValue('--text-placeholder').substring(1)) +'?text=T9 圖1 失敗'; this.alt='T9 產品圖片 1 載入失敗'" /></div><div class="product-carousel-slide"><img src="T9-3.JPG" alt="T9 產品圖片 2" onerror="this.src='https://placehold.co/600x400/'.concat(getComputedStyle(document.body).getPropertyValue('--bg-secondary').substring(1)) +'/'.concat(getComputedStyle(document.body).getPropertyValue('--text-placeholder').substring(1)) +'?text=T9 圖2 失敗'; this.alt='T9 產品圖片 2 載入失敗'" /></div><div class="product-carousel-slide"><img src="T9-4.JPG" alt="T9 產品圖片 3" onerror="this.src='https://placehold.co/600x400/'.concat(getComputedStyle(document.body).getPropertyValue('--bg-secondary').substring(1)) +'/'.concat(getComputedStyle(document.body).getPropertyValue('--text-placeholder').substring(1)) +'?text=T9 圖3 失敗'; this.alt='T9 產品圖片 3 載入失敗'" /></div></div><button class="carousel-button left" aria-label="Previous image"><span class="lucide"></span></button><button class="carousel-button right" aria-label="Next image"><span class="lucide"></span></button></div></div>
+                <!-- Product Card X6 --><div class="feature-card rounded-lg overflow-hidden text-center pt-10 pb-8 px-6 flex flex-col justify-between items-center min-h-[500px]"><div><h3 class="text-3xl font-semibold mb-3">X6</h3><p class="text-lg font-normal mb-5">創新科技，無限可能。</p><div class="space-x-4 mb-6"><a href="https://www.boraton.com/product/x6" class="cta-link">了解詳情</a></div></div><div class="product-carousel-container" data-carousel-id="x6"><div class="product-carousel-track"><div class="product-carousel-slide"><img src="X6-1.jpg" alt="X6 產品圖片 1" onerror="this.src='https://placehold.co/600x400/'.concat(getComputedStyle(document.body).getPropertyValue('--bg-secondary').substring(1)) +'/'.concat(getComputedStyle(document.body).getPropertyValue('--text-placeholder').substring(1)) +'?text=X6 圖1 失敗'; this.alt='X6 產品圖片 1 載入失敗'" /></div><div class="product-carousel-slide"><img src="X6-2.JPG" alt="X6 產品圖片 2" onerror="this.src='https://placehold.co/600x400/'.concat(getComputedStyle(document.body).getPropertyValue('--bg-secondary').substring(1)) +'/'.concat(getComputedStyle(document.body).getPropertyValue('--text-placeholder').substring(1)) +'?text=X6 圖2 失敗'; this.alt='X6 產品圖片 2 載入失敗'" /></div><div class="product-carousel-slide"><img src="X6-3.JPG" alt="X6 產品圖片 3" onerror="this.src='https://placehold.co/600x400/'.concat(getComputedStyle(document.body).getPropertyValue('--bg-secondary').substring(1)) +'/'.concat(getComputedStyle(document.body).getPropertyValue('--text-placeholder').substring(1)) +'?text=X6 圖3 失敗'; this.alt='X6 產品圖片 3 載入失敗'" /></div></div><button class="carousel-button left" aria-label="Previous image"><span class="lucide"></span></button><button class="carousel-button right" aria-label="Next image"><span class="lucide"></span></button></div></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer (HTML 結構不變) -->
+    <footer class="text-xs px-4">
+        <div class="max-w-screen-xl mx-auto">
+            <div class="border-b pb-6 mb-6"> <p>注：產品規格與設計可能隨時變更，恕不另行通知。圖片僅供參考，請以實物為準。</p> </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8"> <div> <h4 class="font-semibold mb-3">產品資訊</h4> <ul> <li><a href="https://www.boraton.com">升降麻將桌</a></li> <li><a href="https://www.boraton.com">抗菌岩板系列</a></li> <li><a href="https://www.boraton.com">智能操控</a></li> <li><a href="https://www.boraton.com">配件選購</a></li> </ul> </div> <div> <h4 class="font-semibold mb-3">客戶服務</h4> <ul> <li><a href="https://www.boraton.com">常見問題</a></li> <li><a href="https://www.boraton.com">訂單查詢</a></li> <li><a href="https://www.boraton.com">維修保固</a></li> <li><a href="https://www.boraton.com">聯絡我們</a></li> </ul> </div> <div> <h4 class="font-semibold mb-3">關於搏朗通</h4> <ul> <li><a href="https://www.boraton.com">品牌故事</a></li> <li><a href="https://www.boraton.com">設計理念</a></li> <li><a href="https://www.boraton.com">最新消息</a></li> <li><a href="https://www.boraton.com">人才招聘</a></li> </ul> </div> <div> <h4 class="font-semibold mb-3">資源中心</h4> <ul> <li><a href="https://www.boraton.com">使用手冊下載</a></li> <li><a href="https://www.boraton.com">安裝指南</a></li> <li><a href="https://www.boraton.com">保養建議</a></li> </ul> </div> </div>
+            <div class="border-b pb-4 mb-4"> <p>想要购买？ <a href="https://shop217730890.taobao.com/?spm=pc_detail.29232929/evo365560b447259.shop_block.dshopinfo.3f427dd6ecMN0W" class="text-blue-400 hover:text-blue-300 font-medium transition-colors duration-200 hover:scale-105 inline-block">进入网店</a>。</p> </div>
+            <div class="flex flex-col md:flex-row justify-between items-center text-center md:text-left"> <p class="mb-2 md:mb-0 text-gray-500">Copyright © 2025 BORATON Inc. 保留一切權利。</p> <div class="flex space-x-4 mb-2 md:mb-0"> <a href="https://www.boraton.com">隱私權政策</a> <a href="https://www.boraton.com">使用條款</a> <a href="https://www.boraton.com">法律聲明</a> </div> <p class="text-gray-500">中國 (簡體中文)</p> </div>
+             <div class="mt-6 pt-6 border-t text-center"> <h5 class="font-semibold mb-2">公司資訊 (開票資訊)</h5> <p class="text-sm">公司：博朗智慧科技(佛山)有限公司</p> <p class="text-sm">註冊地址及電話：佛山市順德區樂從鎮樂從第三工業區永昌玻璃廠內2號樓 聯絡電話 18128788158</p> <p class="text-sm">收票信箱：384317765@qq.com</p> </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript (保持不變) -->
+    <script>
+        // --- Theme Switching Logic ---
+        const themeToggleBtn = document.getElementById('theme-toggle'); const mobileThemeToggleBtn = document.getElementById('mobile-theme-toggle'); const sunIcons = document.querySelectorAll('.sun-icon'); const moonIcons = document.querySelectorAll('.moon-icon'); const body = document.body; const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)"); const applyTheme = (theme) => { if (theme === 'dark') { body.classList.remove('light-theme'); sunIcons.forEach(icon => icon.classList.remove('hidden-icon')); moonIcons.forEach(icon => icon.classList.add('hidden-icon')); localStorage.setItem('theme', 'dark'); } else { body.classList.add('light-theme'); sunIcons.forEach(icon => icon.classList.add('hidden-icon')); moonIcons.forEach(icon => icon.classList.remove('hidden-icon')); localStorage.setItem('theme', 'light'); } }; const toggleTheme = () => { const currentTheme = localStorage.getItem('theme') || (prefersDarkScheme.matches ? 'dark' : 'light'); applyTheme(currentTheme === 'dark' ? 'light' : 'dark'); }; const savedTheme = localStorage.getItem('theme'); const initialTheme = savedTheme || (prefersDarkScheme.matches ? 'dark' : 'light'); applyTheme(initialTheme); if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme); if (mobileThemeToggleBtn) mobileThemeToggleBtn.addEventListener('click', toggleTheme); prefersDarkScheme.addEventListener('change', (e) => { if (!localStorage.getItem('theme')) { applyTheme(e.matches ? 'dark' : 'light'); } });
+        // --- Preloader Logic ---
+        const preloader = document.getElementById('preloader'); window.addEventListener('load', () => { setTimeout(() => { if (preloader) { preloader.style.opacity = '0'; setTimeout(() => preloader.remove(), 500); } document.body.classList.add('loaded'); observeSections(); initializeCarousels(); }, 200); });
+        // --- Mobile Menu Logic ---
+        const mobileMenuButton = document.getElementById('mobile-menu-button'); const mobileMenu = document.getElementById('mobile-menu'); if (mobileMenuButton && mobileMenu) { mobileMenuButton.addEventListener('click', (event) => { event.stopPropagation(); const isHidden = mobileMenu.classList.toggle('hidden'); mobileMenuButton.setAttribute('aria-expanded', String(!isHidden)); const icon = mobileMenuButton.querySelector('.lucide'); if (icon) icon.textContent = isHidden ? '' : ''; if (!isHidden) { setTimeout(() => { document.addEventListener('click', closeMobileMenuOnClickOutside, { once: true }); }, 0); } }); } function closeMobileMenuOnClickOutside(event) { if (mobileMenu && !mobileMenu.classList.contains('hidden') && !mobileMenu.contains(event.target) && !mobileMenuButton.contains(event.target)) { mobileMenu.classList.add('hidden'); mobileMenuButton.setAttribute('aria-expanded', 'false'); const icon = mobileMenuButton.querySelector('.lucide'); if (icon) icon.textContent = ''; } else if (mobileMenu && !mobileMenu.classList.contains('hidden')) { document.addEventListener('click', closeMobileMenuOnClickOutside, { once: true }); } }
+        // --- Dropdown Logic ---
+        const productToggle = document.getElementById('product-category-toggle'); const productMenu = document.getElementById('product-category-menu'); if (productToggle && productMenu) { productToggle.addEventListener('click', (event) => { event.stopPropagation(); const isExpanded = productToggle.getAttribute('aria-expanded') === 'true'; productToggle.setAttribute('aria-expanded', String(!isExpanded)); productMenu.classList.toggle('hidden'); productMenu.classList.toggle('open'); if (!isExpanded) { setTimeout(() => { document.addEventListener('click', closeDropdownOnClickOutside, { once: true }); }, 0); } }); productMenu.addEventListener('click', (event) => { event.stopPropagation(); }); } function closeDropdownOnClickOutside(event) { if (productMenu && !productMenu.classList.contains('hidden') && !productToggle.contains(event.target) && !productMenu.contains(event.target)) { productToggle.setAttribute('aria-expanded', 'false'); productMenu.classList.add('hidden'); productMenu.classList.remove('open'); } else if (productMenu && !productMenu.classList.contains('hidden')) { document.addEventListener('click', closeDropdownOnClickOutside, { once: true }); } }
+        // --- Intersection Observer for Fade-in Sections ---
+        function observeSections() { const sections = document.querySelectorAll('.fade-in-section'); const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); } }); }, { threshold: 0.1 }); sections.forEach(section => { observer.observe(section); }); }
+        // --- Product Carousel Logic ---
+        function initializeCarousels() { const carousels = document.querySelectorAll('.product-carousel-container'); carousels.forEach(carousel => { const track = carousel.querySelector('.product-carousel-track'); const slides = Array.from(track.children); const nextButton = carousel.querySelector('.carousel-button.right'); const prevButton = carousel.querySelector('.carousel-button.left'); if (!track || !slides.length || !nextButton || !prevButton) { console.warn('Carousel structure incomplete for:', carousel.dataset.carouselId); return; } let slideWidth = slides[0].getBoundingClientRect().width; let currentIndex = 0; const maxIndex = slides.length - 1; const updateSlideWidth = () => { slideWidth = slides[0].getBoundingClientRect().width; moveToSlide(currentIndex, false); }; const moveToSlide = (targetIndex, animate = true) => { if (targetIndex < 0) targetIndex = maxIndex; if (targetIndex > maxIndex) targetIndex = 0; const amountToMove = targetIndex * slideWidth; track.style.transition = animate ? 'transform 0.4s ease-in-out' : 'none'; track.style.transform = `translateX(-${amountToMove}px)`; currentIndex = targetIndex; if (!animate) { void track.offsetWidth; track.style.transition = 'transform 0.4s ease-in-out'; } }; moveToSlide(currentIndex, false); nextButton.addEventListener('click', () => moveToSlide(currentIndex + 1)); prevButton.addEventListener('click', () => moveToSlide(currentIndex - 1)); let resizeTimeout; window.addEventListener('resize', () => { clearTimeout(resizeTimeout); resizeTimeout = setTimeout(updateSlideWidth, 150); }); }); }
+    </script>
+
+</body>
+</html>
